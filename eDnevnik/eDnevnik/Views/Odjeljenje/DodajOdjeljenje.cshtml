@@ -1,0 +1,67 @@
+﻿@using eDnevnik.data.ViewModels;
+@{
+    ViewData["Title"] = "DodajOdjeljenje";
+}
+@model OdjeljenjeDodajVM
+
+<div class="container">
+    <div class="row">
+        <h5 class="col-lg-10">Forma za dodavanje odjeljenja</h5>
+        <a class="col-lg-2 btn btn-primary" asp-action="PrikaziOdjeljenja" asp-controller="Odjeljenje">Lista odjeljenja</a>
+    </div>
+    <br />
+    <div class="row">
+        <form class="col-lg-12" method="post" asp-controller="Odjeljenje" asp-action="Snimi">
+            @Html.HiddenFor(p => p.OdjeljenjeID)
+
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label asp-for="Razred">Razred</label>
+                    <input asp-for="Razred" min="1" max="9" value="1" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Oznaka">Oznaka</label>
+                    <input asp-for="Oznaka" class="form-control" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Smjena">Smjena</label>
+                    <input asp-for="Smjena" class="form-control" />
+                </div>
+                <div class="form-group col-md-5">
+                    <label asp-for="Opis">Opis</label>
+                    <input asp-for="Opis" class="form-control" />
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label asp-for="RazrednikID">Razrednik</label>
+                    <select asp-for="RazrednikID" asp-items="@Model.Nastavnici" class="form-control">
+                        <option disabled selected>(odaberite razrednika)</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="PredsjenikID">Predsjednik</label>
+                    <select asp-for="PredsjenikID" asp-items="@Model.Ucenici" class="form-control">
+                        <option disabled selected>(odaberite predsjednika)</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="BlagajnikID">Blagajnik</label>
+                    <select asp-for="BlagajnikID" asp-items="@Model.Ucenici" class="form-control">
+                        <option disabled selected>(odaberite blagajnika)</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="SkolskaGodinaID">SkolskaGodina</label>
+                    <select asp-for="SkolskaGodinaID" asp-items="@Model.SkolskeGodine" class="form-control">
+                        <option disabled selected>(odaberite skolsku godinu)</option>
+                    </select>
+                </div>
+            </div>
+
+            <br />
+            <button type="submit" style="color:white; cursor:pointer;" class="btn btn-success float-right">Snimi</button>
+
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,90 @@
+@using eDnevnik.Helper
+@model eDnevnik.data.ViewModels.SessionIndexVM
+
+@{
+    ViewData["Title"] = "Početna";
+}
+
+<link href="~/css/mainMenu.css" rel="stylesheet" />
+
+<div class="row">
+    <h3 class="display-4 col-lg-8" style="margin-left:20px; margin-bottom:30px;">Dobrodošli, @Context.GetLogiraniKorisnik().Username</h3>
+</div>
+<div id="izbornik" class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3 col-sm-6">
+            <div class="card">
+                <div class="card-header" style="padding:0; border:none;">
+                    <a class="collapsed d-block" data-toggle="collapse" href="#collapse-collapsed1" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                        <img src="~/images/class-course.jpg" class="card-img-top" alt="...">
+                        <h5 class="card-title" style="padding:7px;margin-top:5px;">Odjeljenja <i class="fa fa-chevron-down pull-right"></i></h5>
+                    </a>
+                </div>
+                <div id="collapse-collapsed1" class="collapse" aria-labelledby="heading-collapsed">
+                    <div class="card-body">
+                        <a class="card-text" asp-controller="Odjeljenje" asp-action="PrikaziOdjeljenja">· Pregled odjeljenja</a>
+                        <br />
+                        <a class="card-text" asp-controller="Odjeljenje" asp-action="DodajOdjeljenje">· Dodaj odjeljenja</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="card">
+                <div class="card-header" style="padding:0; border:none;">
+                    <a class="collapsed d-block" data-toggle="collapse" href="#collapse-collapsed2" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                        <img src="~/images/teacher-classroom.jpg" class="card-img-top" alt="...">
+                        <h5 class="card-title" style="padding:7px;margin-top:5px;">Nastavnici <i class="fa fa-chevron-down pull-right"></i></h5>
+                    </a>
+                </div>
+                <div id="collapse-collapsed2" class="collapse" aria-labelledby="heading-collapsed">
+                    <div class="card-body">
+                        <a class="card-text" asp-action="Prikaz" asp-controller="Nastavnik">· Pregled nastavnika</a>
+                        <br />
+                        <a class="card-text" asp-action="Dodaj" asp-controller="Nastavnik">· Dodaj nastavnika</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="card">
+                <div class="card-header" style="padding:0; border:none;">
+                    <a class="collapsed d-block" data-toggle="collapse" href="#collapse-collapsed3" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                        <img src="~/images/back_to_school.jpg" class="card-img-top" alt="...">
+                        <h5 class="card-title" style="padding:7px;margin-top:5px;">Predmeti <i class="fa fa-chevron-down pull-right"></i></h5>
+                    </a>
+                </div>
+                <div id="collapse-collapsed3" class="collapse" aria-labelledby="heading-collapsed">
+                    <div class="card-body">
+                        <a class="card-text" asp-controller="Predmet" asp-action="OverviewPredmet">· Pregled predmeta</a>
+                        <br />
+                        <a class="card-text" asp-controller="Predmet" asp-action="Add">· Dodaj predmet</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="card">
+                <div class="card-header" style="padding:0; border:none;">
+                    <a class="collapsed d-block" data-toggle="collapse" href="#collapse-collapsed4" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                        <img src="~/images/school_1050x700.jpg" class="card-img-top" alt="...">
+                        <h5 class="card-title" style="padding:7px;margin-top:5px;">Učenici <i class="fa fa-chevron-down pull-right"></i></h5>
+                    </a>
+                </div>
+                <div id="collapse-collapsed4" class="collapse" aria-labelledby="heading-collapsed">
+                    <div class="card-body">
+                        <a class="card-text">· Lista svih učenika</a>
+                        <br />
+                        <a class="card-text">· Učenici po odjeljenjima</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a asp-controller="Session" asp-action="Index" style="border:none;
+    background-color:rgb(55,80,108); color:white;position:fixed;bottom:40px;right:50px;" class="btn btn-outline-primary btn-lg">Aktivne sesije</a>
+<a asp-action="Index" asp-controller="Sms" style="border:none;
+    background-color:rgb(55,80,108); color:white;position:fixed;bottom:40px;right:230px;" class="btn btn-outline-primary btn-lg">Pošalji poruku</a>
+

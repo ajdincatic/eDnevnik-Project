@@ -1,0 +1,350 @@
+﻿@using eDnevnik.data.ViewModels;
+@model NastavnikDetaljiVM
+@{
+    ViewData["Title"] = "Nastavnik detalji";
+    var photoPath = string.IsNullOrEmpty(Model.PhotoPath) ? "~/images/infoo.png" : "~/imageUpload/" + Model.PhotoPath;
+    string pozvaniKontroler = ViewContext.RouteData.Values["controller"] as string;
+    string porukaNeuspjesno = null;
+    string porukaUspjesno = null;
+    if (pozvaniKontroler == "Nastavnik")
+    {
+        porukaNeuspjesno = TempData["porukaNeuspjesno"] as string;
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+        porukaUspjesno = (string)TempData["porukaUspjesno"];
+    }
+}
+
+<style>
+    p {
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+    #slika {
+        max-width: 20%;
+        max-height: 200px;
+        border: 5px solid white;
+        margin-left: 10px;
+    }
+</style>
+
+<div class="container">
+    @if (porukaUspjesno != null)
+    {
+        <div class="alert alert-success" id="msg" role="alert">
+            @porukaUspjesno
+        </div>
+        <br />
+    }
+    @if (porukaNeuspjesno != null)
+    {
+        <div class="alert alert-danger" id="msg" role="alert">
+            @porukaNeuspjesno
+        </div>
+        <br />
+    }
+    @if (pozvaniKontroler == "Nastavnik")
+    {
+        <h4>Detalji za osobu, </h4>
+        <a class="btn btn-primary float-right" asp-action="Prikaz">Nazad</a>
+        <a asp-action="DownloadDocumentAdmin" asp-route-Id="@Model.NastavnoOsobljeId" class="float-right mr-2 btn btn-primary btn-info">Preuzmite NPP nastavnika</a>
+    }
+    else
+    {
+        <a class="btn btn-primary float-right" asp-action="HomePageUser" asp-controller="User">Nazad</a>
+        <a class="btn btn-primary float-right mr-2" asp-action="PromjenaLozinke" asp-controller="LogiraniKorisnik">Promjeni lozinku</a>
+        <a asp-action="DownloadDocument" asp-controller="LogiraniKorisnik" class="float-right mr-2 btn btn-primary btn-info">Preuzmite vaš NPP</a>
+    }
+    <h4>@Model.Ime (@Model.ImeRoditelja) @Model.Prezime  |  @Model.Pol  |  @Model.JMBG</h4>
+    <br />
+    <div class="row">
+        <img col-md-3 id="slika" src="@photoPath" asp-append-version="true" />
+        <div class="col-md-5">
+            <br />
+            <span><i class="fas fa-phone"></i> @Model.BrojTelefona</span>
+            <br />
+            <span><i class="fas fa-envelope"></i> @Model.Email</span>
+            <br />
+            <span><i class="fas fa-chalkboard-teacher"></i> @Model.ZavrsenoZanimanje</span>
+        </div>
+    </div>
+    <br />
+    @if (pozvaniKontroler != "Nastavnik")
+    {
+        <form enctype="multipart/form-data" asp-action="AddFile" method="post">
+            <div class="col-sm-5" style="padding:0;">
+                <label class="col-form-label">Nastavni plan i program</label>
+                <div class="custom-file">
+                    <input type="file" name="model" class="form-control custom-file-input">
+                    <label class="custom-file-label">Učitaj fajl...</label>
+                    <input type="submit" class="btn btn-success mt-2" value="Dodaj" />
+                </div>
+            </div>
+        </form>
+    }
+    <br />
+
+    @if (pozvaniKontroler == "Nastavnik")
+    {
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Podaci o nastavniku
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <p>Podaci o rođenju</p>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label asp-for="DatumRodjenja">Datum rođenja</label>
+                                <input type="date" asp-for="DatumRodjenja" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="OpcinaRodjenja">Općina rođenja</label>
+                                <input asp-for="OpcinaRodjenja" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="NazivMjestaRodjenja">Mjesto rođenja</label>
+                                <input asp-for="NazivMjestaRodjenja" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="NazivDrzaveRodjenja">Država rođenja</label>
+                                <input asp-for="NazivDrzaveRodjenja" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <p>Podaci o stanovanju</p>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label asp-for="NazivMjestaStanovanja">Mjesto stanovanja</label>
+                                <input asp-for="NazivMjestaStanovanja" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="NazivDrzaveStanovanja">Država stanovanja</label>
+                                <input asp-for="NazivDrzaveStanovanja" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="AdresaStanovanja">Adresa stanovanja</label>
+                                <input asp-for="AdresaStanovanja" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="OpcinaStanovanja">Općina stanovanja</label>
+                                <input asp-for="OpcinaStanovanja" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <p>Ostale informacije</p>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="Drzavljanstvo">Državljanstvo</label>
+                                <input asp-for="Drzavljanstvo" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="Nacionalnost">Nacionalnost</label>
+                                <input asp-for="Nacionalnost" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <p>Podaci o zanimanju</p>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label asp-for="ZavrsenaSkola">Završena škola</label>
+                                <input asp-for="ZavrsenaSkola" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="Fakultet">Završen fakultet</label>
+                                <input asp-for="Fakultet" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="ZavrsenoZanimanje">Završeno zanimanje</label>
+                                <input asp-for="ZavrsenoZanimanje" class="form-control" readonly />
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label asp-for="BrojDiplome">Broj diplome</label>
+                                <input asp-for="BrojDiplome" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="StrucnaSprema">Stručna sprema</label>
+                                <input asp-for="StrucnaSprema" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label asp-for="PosjedujeDrzavniIspit">Posjeduje državni ispit</label>
+                                <input asp-for="PosjedujeDrzavniIspit" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Predmeti nastavnika
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="list-group" id="predmetiNastavnika">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Razredništvo
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="list-group" id="razrednik">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p>Podaci o rođenju</p>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="DatumRodjenja">Datum rođenja</label>
+                <input type="date" asp-for="DatumRodjenja" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="OpcinaRodjenja">Općina rođenja</label>
+                <input asp-for="OpcinaRodjenja" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="NazivMjestaRodjenja">Mjesto rođenja</label>
+                <input asp-for="NazivMjestaRodjenja" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="NazivDrzaveRodjenja">Država rođenja</label>
+                <input asp-for="NazivDrzaveRodjenja" class="form-control" readonly />
+            </div>
+        </div>
+        <p>Podaci o stanovanju</p>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="NazivMjestaStanovanja">Mjesto stanovanja</label>
+                <input asp-for="NazivMjestaStanovanja" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="NazivDrzaveStanovanja">Država stanovanja</label>
+                <input asp-for="NazivDrzaveStanovanja" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="AdresaStanovanja">Adresa stanovanja</label>
+                <input asp-for="AdresaStanovanja" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="OpcinaStanovanja">Općina stanovanja</label>
+                <input asp-for="OpcinaStanovanja" class="form-control" readonly />
+            </div>
+        </div>
+        <p>Ostale informacije</p>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Drzavljanstvo">Državljanstvo</label>
+                <input asp-for="Drzavljanstvo" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Nacionalnost">Nacionalnost</label>
+                <input asp-for="Nacionalnost" class="form-control" readonly />
+            </div>
+        </div>
+        <p>Podaci o zanimanju</p>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label asp-for="ZavrsenaSkola">Završena škola</label>
+                <input asp-for="ZavrsenaSkola" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Fakultet">Završen fakultet</label>
+                <input asp-for="Fakultet" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="ZavrsenoZanimanje">Završeno zanimanje</label>
+                <input asp-for="ZavrsenoZanimanje" class="form-control" readonly />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label asp-for="BrojDiplome">Broj diplome</label>
+                <input asp-for="BrojDiplome" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="StrucnaSprema">Stručna sprema</label>
+                <input asp-for="StrucnaSprema" class="form-control" readonly />
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="PosjedujeDrzavniIspit">Posjeduje državni ispit</label>
+                <input asp-for="PosjedujeDrzavniIspit" class="form-control" disabled />
+            </div>
+        </div>
+    }
+    <br />
+    <br />
+    @if (pozvaniKontroler == "Nastavnik")
+    {
+        @section Scripts
+        {
+            <script>
+                function loadXML(url, id, sourceTag) {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var rezultat = this.responseXML;
+                            var tag = rezultat.getElementsByTagName(sourceTag);
+                            for (var i = 0; i < tag.length; i++) {
+                                var el = document.createElement("li");
+                                el.className = "list-group-item text-center";
+                                document.getElementById(id).appendChild(el);
+                                el.innerText = tag[i].textContent;
+                            }
+                        }
+                    };
+                    xhttp.open("GET", url, true);
+                    xhttp.send();
+                }
+
+                loadXML("https://cors-anywhere.herokuapp.com/https://webservice.p1859.app.fit.ba/Default.asmx/GetPredmetiByNastavnik?NastavnikId=@Model.NastavnoOsobljeId", "predmetiNastavnika", "Naziv");
+                loadXML("https://cors-anywhere.herokuapp.com/https://webservice.p1859.app.fit.ba/Default.asmx/GetOdjeljenjeByRazrednik?RazrednikId=@Model.NastavnoOsobljeId", "razrednik", "Oznaka");
+            </script>
+        }
+    }
+    else
+    {
+        @section Scripts
+        {
+            <script>
+                $(document).ready(function () {
+                    $('.custom-file-input').on("change", function () {
+                        var fileName = $(this).val().split("\\").pop();
+                        $(this).next('.custom-file-label').html(fileName);
+                    });
+                });
+            </script>
+        }
+    }
+</div>
+
+
+
+

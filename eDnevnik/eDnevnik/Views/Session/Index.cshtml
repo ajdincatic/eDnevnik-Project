@@ -1,0 +1,34 @@
+﻿@using eDnevnik.Helper
+@model eDnevnik.data.ViewModels.SessionIndexVM
+@{
+    ViewData["Title"] = "Sesije";
+}
+
+<h2>Aktivne sesije za korisnika @Context.GetLogiraniKorisnik().Username</h2>
+
+
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Vrijeme</th>
+        <th>Akcija</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var x in Model.Rows)
+    {
+        <tr>
+            <td>@x.VrijemeLogiranja
+                @if (x.token == Model.TrenutniToken)
+                {
+                    <strong>(trenutna sesija)</strong>
+                }
+            </td>
+            <td>
+                <a asp-action="Obrisi" asp-route-token="@x.token" class="btn btn-danger">Obrisi</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

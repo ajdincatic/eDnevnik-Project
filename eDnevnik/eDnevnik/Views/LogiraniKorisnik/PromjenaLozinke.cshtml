@@ -1,0 +1,58 @@
+﻿@using eDnevnik.data.ViewModels;
+@{
+    ViewData["Title"] = "Promjena lozinke";
+    var poruka = TempData["poruka"];
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+@model UserPromjenaLozinkeVM
+
+<style>
+    .pass_show{position: relative} 
+    .pass_show .ptxt { 
+        position: absolute; 
+        top: 50%; 
+        right: 10px; 
+        z-index: 1; 
+        color: #f36c01; 
+        margin-top: -20px; 
+        cursor: pointer; 
+        transition: .3s ease all; 
+    } 
+    .pass_show .ptxt:hover{color: #333333;} 
+    form span{color:red;}
+</style>
+
+<div class="container">
+    @if (poruka != null)
+    {
+        <div class="alert alert-danger" id="msg" role="alert">
+            @poruka
+        </div>
+    }
+    <div class="row">
+        <h3>Promjena lozinke</h3>
+    </div>
+    <br />
+    <div class="row" >
+        <div class="col-sm-5" style="margin-right: auto;margin-left: auto;">
+            <form asp-action="UpdateLozinka">
+                <label>Trenutni Password</label>
+                <div class="form-group pass_show">
+                    <input type="password" asp-for="StaraLozinka" class="form-control">
+                    <span asp-validation-for="StaraLozinka"></span>
+                </div>
+                <label>Novi Password</label>
+                <div class="form-group pass_show">
+                    <input type="password" asp-for="NovaLozinka" class="form-control">
+                    <span asp-validation-for="NovaLozinka"></span>
+                </div>
+                <label>Potvrdi novi Password</label>
+                <div class="form-group pass_show">
+                    <input type="password" asp-for="NovaLozinkaPotvrda" class="form-control">
+                    <span asp-validation-for="NovaLozinkaPotvrda"></span>
+                </div>
+                <input type="submit" class="btn btn-success float-right" value="Snimi" />
+            </form>
+        </div>
+    </div>
+</div>

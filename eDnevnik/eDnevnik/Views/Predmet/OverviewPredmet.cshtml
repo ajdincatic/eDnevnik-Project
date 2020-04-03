@@ -1,0 +1,85 @@
+﻿@using eDnevnik.data.ViewModels;
+@using X.PagedList.Mvc.Core;
+@using eDnevnik.Helper;
+@using X.PagedList;
+@model IPagedList<PredmetEditVM>
+@{
+    ViewData["Title"] = "Pregled Predmeta";
+    var porukaUspjesno = (string)TempData["porukaUspjesno"];
+    var porukaError = (string)TempData["porukaError"];
+}
+
+
+<div class="container">
+    @if (porukaUspjesno != null)
+    {
+        <div class="alert alert-success" id="msg" role="alert">
+            @porukaUspjesno
+        </div>
+    }
+
+    @if (porukaError != null)
+    {
+        <div class="alert alert-danger" id="msg" role="alert">
+            @porukaError
+        </div>
+    }
+    <div class="row">
+        <h5 class="col-lg-10">Pregled predmeta</h5>
+        <a class="col-lg-2 btn btn-primary" asp-action="Add" asp-controller="Predmet">Dodaj predmet</a>
+    </div>
+    <div class="row">
+        <form action="#" method="post">
+            <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+                <div class="input-group">
+                    <input type="text" name="key" placeholder="Pretraga" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+                    <div class="input-group-append">
+                        <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <table class="table" style="text-align:center;">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Redni broj</th>
+                    <th>Naziv</th>
+                    <th>Razred</th>
+                    <th>Predavač</th>
+                    <th>Izborni</th>
+                    <th>Akcija</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (PredmetEditVM x in Model)
+                {
+                    <tr>
+                        <td>@x.PredmetID</td>
+                        <td>@x.Naziv</td>
+                        <td>@x.Razred</td>
+                        <td>@x.Predavac</td>
+                        @if (x.Izborni == true)
+                        {
+                            <td>Da</td>
+                        }
+                        else
+                        {
+                            <td>Ne</td>
+                        }
+                        <td>
+                            <a asp-action="EditPredmet" asp-route-PredmetID="@x.PredmetID" class="btn btn-success">Uredi</a>
+                            <a asp-action="Delete" asp-route-PredmetID="@x.PredmetID" class="btn btn-danger" style="color:white;">Obriši</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @Html.PagedListPager(Model,
+            page => Url.Action("OverviewPredmet", new { page }), new PaginationStyling())
+    </div>
+</div>
+

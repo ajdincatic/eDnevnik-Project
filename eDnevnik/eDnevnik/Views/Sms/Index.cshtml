@@ -1,0 +1,25 @@
+﻿@model eDnevnik.data.ViewModels.SmsSaljiSMSVM
+@{
+    ViewData["Title"] = "Index";
+      var porukaUspjesno = (string)TempData["porukaUspjesno"];
+}
+
+<h3>Pošalji poruku</h3>
+
+<form method="post">
+    @if (porukaUspjesno != null)
+    {
+        <div class="alert alert-success" id="msg" role="alert">
+            @porukaUspjesno
+        </div>
+    }
+    <label>Pošiljaoc</label>
+    <input type="text" asp-for="posiljaoc" class="form-control" />
+    <br />
+    <label>Broj telefona</label>
+    <input class="form-control" asp-for="brojTelefona" readonly value="38762919807" />
+    <label>Poruka</label>
+    <textarea class="form-control" asp-for="tekstPoruke"></textarea>
+    <br />
+    <button class="btn btn-success" onclick="location.href='@Url.Action("Index","Sms")'"> Pošalji poruku</button>
+</form>
