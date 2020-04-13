@@ -1,0 +1,107 @@
+﻿@model eDnevnik.data.ViewModels.PredmetEditVM
+
+@{
+    string pozvanaAkcija = ViewContext.RouteData.Values["Action"] as string;
+    @if (pozvanaAkcija == "Add")
+    {
+        ViewData["Title"] = "Dodaj predmet";
+    }
+    else
+    {
+        ViewData["Title"] = "Uredi predmet";
+    }
+    var photoPath = string.IsNullOrEmpty(Model.PhotoPath) ? "~/images/infoo.png" : "~/imageUpload/" + Model.PhotoPath;
+}
+
+<div class="container">
+    <div class="row">
+        <h5 class="col-lg-10">Forma za dodavanje predmeta</h5>
+        <a class="col-lg-2 btn btn-primary" asp-action="OverviewPredmet" asp-controller="Predmet">Lista predmeta</a>
+    </div>
+    <br />
+    <div class="row">
+        <form enctype="multipart/form-data" class="col-lg-12" method="post" asp-action="Save">
+            @Html.HiddenFor(p => p.PredmetID)
+            <div class="form-group row">
+                @if (pozvanaAkcija != "Add")
+                {
+                    <div class="col-sm-2" id="imageContainer">
+                        <img id="image" src="@photoPath" asp-append-version="true" style="max-height:150px; max-width:150px; border:3px solid white;margin:0 auto; display:block;" />
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-2" id="imageContainer">
+                        <img id="image" src="~/images/add-image-icon-14.jpg" asp-append-version="true" style="max-height:150px; max-width:150px; border:3px solid white;margin:0 auto; display:block;" />
+                    </div>
+                }
+                <div class="col-sm-5">
+                    <label asp-for="Photo" class="col-form-label">Slika</label>
+                    <div class="custom-file">
+                        <input asp-for="Photo" class="form-control custom-file-input" id="inpFile">
+                        <label class="custom-file-label">Učitaj sliku...</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Naziv</label>
+                <input asp-for="Naziv" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Razred</label>
+                <input asp-for="Razred" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Predavač</label>
+                <select asp-for="PredavacID" asp-items="Model.Predavaci" class="form-control">
+                    <option selected disabled>--Odaberi predavača--</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Izborni predmet?</label>
+                <input asp-for="Izborni" class="mark" />
+            </div>
+
+            <input type="submit" value="Snimi" class="btn btn-success float-right" />
+        </form>
+    </div>
+     @section Scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
+            });
+
+            // image upload
+
+            const inputFile = document.getElementById("inpFile");
+            const imageContainer = document.getElementById("imageContainer");
+            const image = imageContainer.querySelector("#image");
+            const oldImage = image.getAttribute("src");
+
+            inputFile.addEventListener("change", function () {
+                const file = this.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.addEventListener("load", function () {
+                        image.setAttribute("src", this.result);
+                    });
+
+                    reader.readAsDataURL(file);
+                }
+                else {
+                    image.setAttribute("src", oldImage);
+                }
+            });
+        </script>
+    }
+</div>
+

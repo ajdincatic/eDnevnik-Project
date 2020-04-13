@@ -1,0 +1,40 @@
+﻿@using eDnevnik.data.ViewModels
+@using eDnevnik.Helper
+
+@{
+    ViewData["Title"] = "Novi";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+@model List<UserPredmetiPregledVM>
+<h3>Pregled predmeta za nastavnika @Context.GetLogiraniKorisnik().Username</h3>
+
+<table class="table table-active">
+    <thead>
+        <tr>
+            <th>Naziv predmeta</th>
+            <th>Razred</th>
+            <th>Izborni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.nazivPredmeta</td>
+                <td>@x.razred</td>
+                <td>
+                    @if (x.izborni == true)
+                    {
+                        <label>Da</label>
+                    }
+                    else
+                    {
+                        <label>Ne</label>
+                    }
+            </td>
+        </tr>
+    }
+
+    </tbody>
+
+</table>

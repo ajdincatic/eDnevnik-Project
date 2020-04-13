@@ -1,0 +1,80 @@
+﻿@using eDnevnik.data.ViewModels;
+@using X.PagedList.Mvc.Core;
+@using eDnevnik.Helper;
+@using X.PagedList;
+@{
+    ViewData["Title"] = "Prikaz nastavnika";
+    var porukaUspjesno = (string)TempData["porukaUspjesno"];
+    var porukaNeuspjesno = (string)TempData["porukaNeuspjesno"];
+}
+
+@model IPagedList<NastavnikPrikazVM>
+
+<div class="container">
+    @if (porukaUspjesno != null)
+    {
+        <div class="alert alert-success" id="msg" role="alert">
+            @porukaUspjesno
+        </div>
+    }
+    @if (porukaNeuspjesno != null)
+    {
+        <div class="alert alert-danger" id="msg" role="alert">
+            @porukaNeuspjesno
+        </div>
+    }
+    <div class="row">
+        <h5 class="col-lg-10">Pregled nastavnika</h5>
+        <a class="col-lg-2 btn btn-primary" asp-action="Dodaj">Dodaj nastavnika</a>
+    </div>
+    <div class="row">
+        <form action="/Nastavnik/Pretraga" method="post">
+            <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+                <div class="input-group">
+                    <input type="text" name="key" placeholder="Pretraga" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+                    <div class="input-group-append">
+                        <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <table id="myTable" class="table" style="text-align:center; ">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Ime i prezime</th>
+                    <th>Ime roditelja</th>
+                    <th>Pol</th>
+                    <th>Broj telefona</th>
+                    <th>E-mail</th>
+                    <th>Završeno zanimanje</th>
+                    <th>Akcija</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var x in Model)
+                {
+                    <tr>
+                        <td>@x.Ime @x.Prezime</td>
+                        <td>@x.ImeRoditelja</td>
+                        <td>@x.Pol</td>
+                        <td>@x.BrojTelefona</td>
+                        <td>@x.Email</td>
+                        <td>@x.ZavrsenoZanimanje</td>
+                        <td>
+                            <a class="btn btn-primary" asp-action="Detalji" asp-route-nastavnoOsobljeId="@x.ID">Detalji</a>
+                            <a asp-action="Uredi" asp-route-nastavnoOsobljeId="@x.ID" class="btn btn-success">Uredi</a>
+                            <a style="color:white;cursor:pointer;" asp-action="Obrisi" asp-route-nastavnoOsobljeId="@x.ID" class="btn btn-danger">Obriši</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @* generisanje paginga *@
+        @Html.PagedListPager(Model,
+            page => Url.Action("Prikaz", new { page }), new PaginationStyling())
+    </div>
+</div>
+

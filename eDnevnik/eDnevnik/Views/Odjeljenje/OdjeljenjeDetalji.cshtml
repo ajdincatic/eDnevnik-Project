@@ -1,0 +1,93 @@
+﻿@using eDnevnik.data.ViewModels;
+
+@{
+    ViewData["Title"] = "OdjeljenjeDetalji";
+}
+
+@model OdjeljenjeDetaljiVM
+<div class="container">
+
+    <div class="row">
+        <h5 class="col-lg-10">Detalji odjeljenja</h5>
+        <a class="col-lg-2 btn btn-primary" asp-action="PrikaziOdjeljenja" asp-controller="Odjeljenje">Lista odjeljenja</a>
+    </div>
+    <br />
+    @*<div class="row">
+        <table id="myTable" class="table" style="text-align:center; ">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Razred</th>
+                    <th>Oznaka</th>
+                    <th>Razrednik</th>
+                    <th>Predsjednik</th>
+                    <th>Blagajnik</th>
+                    <th>Smjena</th>
+                    <th>Skolska Godina</th>
+                    <th>Opis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.Razred</td>
+                    <td>@Model.Oznaka</td>
+                    <td>
+                        
+                        <a asp-action="NastavnikDetalji" asp-controller="Nastavnik" asp-route-nastavnoOsobljeId="@Model.RazrednikID">@Model.Razrednik</a>
+                    </td>
+                    <td>@Model.Predsjednik</td>
+                    <td>@Model.Blagajnik</td>
+                    <td>@Model.Smjena</td>
+                    <td>@Model.SkolskaGodina</td>
+                    <td>@Model.Opis</td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>*@
+    <div class="row">
+        <form class="col-lg-12">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label asp-for="Razred">Razred</label>
+                    <input asp-for="Razred" class="form-control" readonly />
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Oznaka">Oznaka</label>
+                    <input asp-for="Oznaka" class="form-control" readonly />
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Smjena">Smjena</label>
+                    <input asp-for="Smjena" class="form-control" readonly />
+                </div>
+                <div class="form-group col-md-5">
+                    <label asp-for="Opis">Opis</label>
+                    <input asp-for="Opis" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Razrednik</label>
+                    <input asp-for="@Model.Razrednik" class="form-control" readonly />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Detalji Razrednika</label>
+                    <a class="btn btn-primary form-control" asp-action="NastavnikDetalji" asp-controller="Nastavnik" asp-route-nastavnoOsobljeId="@Model.RazrednikID">Detalji</a>
+                </div>
+            </div>
+            <div class="form-row">
+
+                <div class="form-group col-md-4">
+                    <label>Predsjednik</label>
+                    <input asp-for="@Model.Predsjednik" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="form-row">
+
+                <div class="form-group col-md-4">
+                    <label>Blagajnik</label>
+                    <input asp-for="@Model.Blagajnik" class="form-control" readonly />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,247 @@
+﻿@using eDnevnik.data.ViewModels;
+@using System.IO;
+@{
+    string pozvanaAkcija = ViewContext.RouteData.Values["Action"] as string;
+    @if (pozvanaAkcija == "Dodaj")
+        ViewData["Title"] = "Dodaj nastavnika";
+    else
+        ViewData["Title"] = "Uredi nastavnika";
+    var photoPath = string.IsNullOrEmpty(Model.PhotoPath) ? "~/images/infoo.png" : "~/imageUpload/" + Model.PhotoPath;
+}
+@model NastavnikDodajVM
+
+<style>
+    p {
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+    form span {
+        color: red;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        @if (pozvanaAkcija == "Dodaj")
+        {
+            <h5 class="col-lg-10">Forma za dodavanje nastavnika</h5>
+        }
+        else
+        {
+            <h5 class="col-lg-10">Forma za uređivanje nastavnika</h5>
+        }
+        <a class="col-lg-2 btn btn-primary" asp-action="Prikaz">Lista nastavnika</a>
+    </div>
+    <br />
+    <div class="row">
+        <form enctype="multipart/form-data" class="col-lg-12" method="post" asp-action="Snimi">
+            <p>Opšte informacije</p>
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(p => p.NastavnoOsobljeID)
+            <div class="form-group row">
+                @if (pozvanaAkcija != "Dodaj")
+                {
+                    <div class="col-sm-2" id="imageContainer">
+                        <img id="image" src="@photoPath" asp-append-version="true" style="max-height:150px; max-width:150px; border:3px solid white;margin:0 auto; display:block;" />
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-2" id="imageContainer">
+                        <img id="image" src="~/images/add-image-icon-14.jpg" asp-append-version="true" style="max-height:150px; max-width:150px; border:3px solid white;margin:0 auto; display:block;" />
+                    </div>
+                }
+                <div class="col-sm-5">
+                    <label asp-for="Photo" class="col-form-label">Slika</label>
+                    <div class="custom-file">
+                        <input asp-for="Photo" class="form-control custom-file-input" id="inpFile">
+                        <label class="custom-file-label">Učitaj sliku...</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label asp-for="Ime">Ime</label>
+                    <input asp-for="Ime" class="form-control" />
+                    <span asp-validation-for="Ime"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="ImeRoditelja">Ime roditelja</label>
+                    <input asp-for="ImeRoditelja" class="form-control" />
+                    <span asp-validation-for="ImeRoditelja"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Prezime"></label>
+                    <input asp-for="Prezime" class="form-control" />
+                    <span asp-validation-for="Prezime"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label asp-for="Pol"></label>
+                    <input asp-for="Pol" class="form-control" />
+                    <span asp-validation-for="Pol"></span>
+                </div>
+                <div class="form-group col-md-10">
+                    <label asp-for="JMBG"></label>
+                    <input asp-for="JMBG" class="form-control" />
+                    <span asp-validation-for="JMBG"></span>
+                </div>
+            </div>
+            <p>Podaci o rođenju</p>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label asp-for="DatumRodjenja">Datum rođenja</label>
+                    @if (pozvanaAkcija == "Dodaj")
+                    {
+                        <input type="date" value="yyyy-dd-mm" asp-for="DatumRodjenja" class="form-control" />
+                    }
+                    else
+                    {
+                        <input type="date" asp-for="DatumRodjenja" class="form-control" />
+                    }
+                    <span asp-validation-for="DatumRodjenja"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="OpcinaRodjenja">Općina rođenja</label>
+                    <input asp-for="OpcinaRodjenja" class="form-control" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="MjestoRodjenjaID">Mjesto rođenja</label>
+                    <select asp-for="MjestoRodjenjaID" asp-items="@Model.Gradovi" class="form-control">
+                        <option disabled selected>(odaberite grad)</option>
+                    </select>
+                    <span asp-validation-for="MjestoRodjenjaID"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="DrzavaRodjenjaID">Država rođenja</label>
+                    <select asp-for="DrzavaRodjenjaID" asp-items="@Model.Drzave" class="form-control" id="drzave">
+                        <option disabled selected>(odaberite državu)</option>
+                    </select>
+                    <span asp-validation-for="DrzavaRodjenjaID"></span>
+                </div>
+            </div>
+            <p>Podaci o stanovanju</p>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label asp-for="GradID">Grad</label>
+                    <select asp-for="GradID" asp-items="@Model.Gradovi" class="form-control">
+                        <option disabled selected>(odaberite grad)</option>
+                    </select>
+                    <span asp-validation-for="GradID"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="DrzavaID">Država</label>
+                    <select asp-for="DrzavaID" asp-items="@Model.Drzave" class="form-control">
+                        <option disabled selected>(odaberite državu)</option>
+                    </select>
+                    <span asp-validation-for="DrzavaID"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Adresa">Adresa stanovanja</label>
+                    <input asp-for="Adresa" class="form-control" />
+                    <span asp-validation-for="Adresa"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="OpćinaPrebivalista">Općina stanovanja</label>
+                    <input asp-for="OpćinaPrebivalista" class="form-control" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="BrojTelefona">Broj telefona</label>
+                    <input asp-for="BrojTelefona" class="form-control" />
+                    <span asp-validation-for="BrojTelefona"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <p>Ostale informacije</p>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Drzavljanstvo">Državljanstvo</label>
+                    <input asp-for="Drzavljanstvo" class="form-control" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Nacionalnost">Nacionalnost</label>
+                    <input asp-for="Nacionalnost" class="form-control" />
+                </div>
+            </div>
+            <p>Podaci o zanimanju</p>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label asp-for="ZavrsenaSkola">Završena škola</label>
+                    <input asp-for="ZavrsenaSkola" class="form-control" />
+                    <span asp-validation-for="ZavrsenaSkola"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Fakultet">Završen fakultet</label>
+                    <input asp-for="Fakultet" class="form-control" />
+                    <span asp-validation-for="Fakultet"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="ZavrsenoZanimanje">Završeno zanimanje</label>
+                    <input asp-for="ZavrsenoZanimanje" class="form-control" />
+                    <span asp-validation-for="ZavrsenoZanimanje"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label asp-for="BrojDiplome">Broj diplome</label>
+                    <input asp-for="BrojDiplome" class="form-control" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="StrucnaSpremaID">Stručna sprema</label>
+                    <select asp-for="StrucnaSpremaID"
+                            asp-items="@Model.StrucneSpreme" class="form-control"></select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="PosjedujeDrzavniIspit">Posjeduje državni ispit ?</label>
+                    <input asp-for="PosjedujeDrzavniIspit" class="form-control" />
+                </div>
+            </div>
+
+            <button type="submit" style="color:white; cursor:pointer;" class="btn btn-success float-right">Snimi</button>
+
+        </form>
+    </div>
+    @section Scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
+            });
+
+            // image upload
+
+            const inputFile = document.getElementById("inpFile");
+            const imageContainer = document.getElementById("imageContainer");
+            const image = imageContainer.querySelector("#image");
+            const oldImage = image.getAttribute("src");
+
+            inputFile.addEventListener("change", function () {
+                const file = this.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.addEventListener("load", function () {
+                        image.setAttribute("src", this.result);
+                    });
+
+                    reader.readAsDataURL(file);
+                }
+                else {
+                    image.setAttribute("src", oldImage);
+                }
+            });
+        </script>
+    }
+</div>

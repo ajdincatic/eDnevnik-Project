@@ -1,0 +1,11 @@
+﻿@model int  
+@{
+    ViewData["Title"] = "PredmetNotFound";
+}
+    <div class="alert alert-danger">
+        <h4>Predmet sa ID @Model nije pronađen</h4>
+    </div>
+
+<a asp-action="HomePageAdmin" asp-controller="Admin">
+    Kliknite ovdje za odlazak na početnu stranicu
+</a>

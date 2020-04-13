@@ -1,0 +1,165 @@
+﻿@using eDnevnik.data.ViewModels;
+@using System.IO;
+@{
+    string pozvanaAkcija = ViewContext.RouteData.Values["Action"] as string;
+     ViewData["Title"] = "Dodaj Ucenika";
+
+}
+@model UcenikDodajVM
+
+<style>
+    p {
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+    form span {
+        color: red;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        @*@if (pozvanaAkcija == "Dodaj")
+        {
+            <h5 class="col-lg-10">Forma za dodavanje nastavnika</h5>
+        }
+        else
+        {
+            <h5 class="col-lg-10">Forma za uređivanje nastavnika</h5>
+        }*@
+        <a class="col-lg-2 btn btn-primary" asp-controller="Ucenik" asp-action="Prikaz">Lista ucenika </a>
+    </div>
+    <br />
+    <div class="row">
+        <form enctype="multipart/form-data" class="col-lg-12" method="post" asp-action="Snimi">
+            <p>Opšte informacije</p>
+            @*@Html.AntiForgeryToken()*@
+            @*@Html.HiddenFor(p => p.)*@
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label asp-for="Ime">Ime</label>
+                    <input asp-for="Ime" class="form-control" />
+                    <span asp-validation-for="Ime"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="ImeRoditelja">Ime roditelja</label>
+                    <input asp-for="ImeRoditelja" class="form-control" />
+                    <span asp-validation-for="ImeRoditelja"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Prezime"></label>
+                    <input asp-for="Prezime" class="form-control" />
+                    <span asp-validation-for="Prezime"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label asp-for="Pol"></label>
+                    <input asp-for="Pol" class="form-control" />
+                    <span asp-validation-for="Pol"></span>
+                </div>
+                <div class="form-group col-md-10">
+                    <label asp-for="JMBG"></label>
+                    <input asp-for="JMBG" class="form-control" />
+                    <span asp-validation-for="JMBG"></span>
+                </div>
+            </div>
+            <p>Podaci o rođenju</p>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label asp-for="DatumRodjenja">Datum rođenja</label>
+                    @if (pozvanaAkcija == "Dodaj")
+                    {
+                        <input type="date" value="yyyy-dd-mm" asp-for="DatumRodjenja" class="form-control" />
+                    }
+                    else
+                    {
+                        <input type="date" asp-for="DatumRodjenja" class="form-control" />
+                    }
+                    <span asp-validation-for="DatumRodjenja"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Općina rođenja</label>
+                    <input asp-for="OpćinaRodjenja" class="form-control" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Mjesto rođenja</label>
+                    <select asp-for="GradRodjenjaID" asp-items="@Model.Gradovi" class="form-control">
+                        <option disabled selected>(odaberite grad)</option>
+                    </select>
+                    <span asp-validation-for="GradRodjenjaID"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="DrzavaRodjenjaID">Država rođenja</label>
+                    <select asp-for="DrzavaRodjenjaID" asp-items="@Model.Drzave" class="form-control" id="drzave">
+                        <option disabled selected>(odaberite državu)</option>
+                    </select>
+                    <span asp-validation-for="DrzavaRodjenjaID"></span>
+                </div>
+            </div>
+            <p>Podaci o stanovanju</p>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Grad</label>
+                    <select asp-for="GradStanovanjaID" asp-items="@Model.Gradovi" class="form-control">
+                        <option disabled selected>(odaberite grad)</option>
+                    </select>
+                    <span asp-validation-for="GradStanovanjaID"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="DrzavaStanovanjaID">Država</label>
+                    <select asp-for="DrzavaStanovanjaID" asp-items="@Model.Drzave" class="form-control">
+                        <option disabled selected>(odaberite državu)</option>
+                    </select>
+                    <span asp-validation-for="DrzavaStanovanjaID"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Adresa">Adresa stanovanja</label>
+                    <input asp-for="Adresa" class="form-control" />
+                    <span asp-validation-for="Adresa"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="OpćinaPrebivalista">Općina stanovanja</label>
+                    <input asp-for="OpćinaPrebivalista" class="form-control" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="BrojTelefona">Broj telefona</label>
+                    <input asp-for="BrojTelefona" class="form-control" />
+                    <span asp-validation-for="BrojTelefona"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <p>Ostale informacije</p>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Drzavljanstvo">Državljanstvo</label>
+                    <input asp-for="Drzavljanstvo" class="form-control" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Nacionalnost">Nacionalnost</label>
+                    <input asp-for="Nacionalnost" class="form-control" />
+                </div>
+            </div>
+            <p>Podaci o statusu porodice</p>
+            <div class="form-group col-md-3">
+                <label asp-for="PorodicaID">Status porodice</label>
+                <select asp-for="PorodicaID" asp-items="@Model.Porodica" class="form-control">
+                    <option disabled selected>(odaberite status porodice ucenika)</option>
+                </select>
+                <span asp-validation-for="PorodicaID"></span>
+            </div>
+            <input asp-for="UcenikID"type="hidden"  />
+
+            <button type="submit" style="color:white; cursor:pointer;" class="btn btn-success float-right">Snimi</button>
+
+        </form>
+    </div>
+   
+</div>
