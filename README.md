@@ -8,4 +8,5 @@ Link aplikacije : https://p1859.app.fit.ba/
 Link web servisa : https://webservice.p1859.app.fit.ba/
 
 © Ajdin Ćatić, Amer Hadžić, Kenan Pecikoza
+
 Faculty of Information Technology, University Džemal Bijedić of Mostar
