@@ -2,7 +2,7 @@
 Projekat elektronskog dnevnika iz predmeta Razvoj softvera I.
 
 
-![Image description](RukaLjubavi.Android/app/src/main/res/drawable/logo.png)
+![Image description](logo.png)
 
 Link aplikacije : https://p1859.app.fit.ba/
 
